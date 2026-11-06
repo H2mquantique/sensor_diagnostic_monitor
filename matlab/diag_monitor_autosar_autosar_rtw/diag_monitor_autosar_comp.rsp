@@ -1,0 +1,9 @@
+-IC:/Automotive_Projects/sensor-diagnostic-monitor/matlab
+-IC:/Automotive_Projects/sensor-diagnostic-monitor/matlab/diag_monitor_autosar_autosar_rtw
+-IC:/Program\ Files/MATLAB/R2022b/toolbox/coder/autosar/rte
+-IC:/Automotive_Projects/sensor-diagnostic-monitor/matlab/diag_monitor_autosar_autosar_rtw/stub
+-IC:/Program\ Files/MATLAB/R2022b/extern/include
+-IC:/Program\ Files/MATLAB/R2022b/simulink/include
+-IC:/Program\ Files/MATLAB/R2022b/rtw/c/src
+-IC:/Program\ Files/MATLAB/R2022b/rtw/c/src/ext_mode/common
+-IC:/Program\ Files/MATLAB/R2022b/rtw/c/ert

@@ -1,0 +1,88 @@
+
+============================================
+ AUTOSAR PRE-GENERATION AUDIT
+============================================
+
+[1] MODEL CONFIGURATION
+Model: diag_monitor_autosar
+Target: autosar.tlc
+Solver: Fixed-step
+Fixed step: D.Ts
+
+[2] AUTOSAR COMPONENT AND PORT MAPPINGS
+SWC: /Components/diag_monitor_autosar
+Behavior: diag_monitor_autosar/Behavior
+INPUT  v1         Port=v1 Element=v1 Mode=ImplicitReceive
+INPUT  v2         Port=v2 Element=v2 Mode=ImplicitReceive
+INPUT  rpm        Port=rpm Element=rpm Mode=ImplicitReceive
+INPUT  load       Port=load Element=load Mode=ImplicitReceive
+INPUT  ect        Port=ect Element=ect Mode=ImplicitReceive
+OUTPUT state      Port=state Element=state Mode=ImplicitSend
+OUTPUT dtc        Port=dtc Element=dtc Mode=ImplicitSend
+OUTPUT mil        Port=mil Element=mil Mode=ImplicitSend
+OUTPUT ff_valid   Port=ff_valid Element=ff_valid Mode=ImplicitSend
+
+[3] MODEL UPDATE AND SIGNAL TYPES
+
+[4] AUTOSAR DATA TYPES AND INTERFACES
+ImplementationDataTypes: 0
+ApplicationDataTypes: 0
+Port interfaces: 9
+Interface: /Interfaces/v1
+Interface: /Interfaces/v2
+Interface: /Interfaces/rpm
+Interface: /Interfaces/load
+Interface: /Interfaces/ect
+Interface: /Interfaces/state
+Interface: /Interfaces/dtc
+Interface: /Interfaces/mil
+Interface: /Interfaces/ff_valid
+
+[5] RUNNABLES AND TIMING EVENTS
+Runnable count: 2
+Event count: 1
+Runnable: /Components/diag_monitor_autosar/Behavior/diag_monitor_autosar_Init
+Runnable: /Components/diag_monitor_autosar/Behavior/diag_monitor_autosar_Step
+Event: /Components/diag_monitor_autosar/Behavior/Event_diag_monitor_autosar_Step
+  StartOnEvent: diag_monitor_autosar/Behavior/diag_monitor_autosar_Step
+  Period: 0.01
+
+[6] SAVE AUTOSAR MODEL
+Model saved successfully.
+
+[7] AUTOSAR CODE GENERATION
+BUILD SKIPPED: essential checks failed.
+
+============================================
+ FINAL REPORT
+============================================
+Errors: 1
+Warnings: 10
+
+ERROR 1: Model update/compilation: Unable to evaluate expression 'D.Ts' for sample time of chart <a href="matlab:sfprivate('sfOpenObjectBySId','diag_monitor_autosar:8')">'diag_monitor_autosar/DiagMonitor/Supervisor'</a>.
+
+
+
+WARNING 1: Could not inspect interface: /Interfaces/v1
+
+WARNING 2: Could not inspect interface: /Interfaces/v2
+
+WARNING 3: Could not inspect interface: /Interfaces/rpm
+
+WARNING 4: Could not inspect interface: /Interfaces/load
+
+WARNING 5: Could not inspect interface: /Interfaces/ect
+
+WARNING 6: Could not inspect interface: /Interfaces/state
+
+WARNING 7: Could not inspect interface: /Interfaces/dtc
+
+WARNING 8: Could not inspect interface: /Interfaces/mil
+
+WARNING 9: Could not inspect interface: /Interfaces/ff_valid
+
+WARNING 10: No ImplementationDataType found in AUTOSAR properties
+
+Essential checks require correction.
+
+Report saved to: C:\Automotive_Projects\sensor-diagnostic-monitor\autosar_precheck_report.txt

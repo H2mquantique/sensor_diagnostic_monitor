@@ -32,8 +32,7 @@ function test_confirm_debounce_REQ004(tc)
     D = tc.TestData.D;
     st = run_seq(D, repmat(4.90, 1, D.confirm_cnt), v2(D,40), 90);
     verifyEqual(tc, double(st.state), 2, 'REQ-DIAG-004 confirms after threshold');
-    verifyEqual(tc, st.mil, 1, 'REQ-DIAG-007 MIL on when confirmed');
-end
+    verifyEqual(tc, st.mil, true, 'REQ-DIAG-007 MIL on when confirmed');end
 
 % --- REQ-DIAG-004 : single-sample glitch must not confirm ---------------
 function test_no_false_trip_REQ004(tc)
@@ -41,15 +40,14 @@ function test_no_false_trip_REQ004(tc)
     v = [v1(D,40), 4.90, repmat(v1(D,40), 1, 50)];   % one bad sample, then clean
     st = run_seq(D, v, v2(D,40), 90);
     verifyEqual(tc, double(st.state), 0, 'no confirmation on a glitch');
-    verifyEqual(tc, st.milEver, 0, 'MIL never lit on a glitch');
-end
+    verifyEqual(tc, st.milEver, false, 'MIL never lit on a glitch');end
 
 % --- REQ-DIAG-005 : an unconfirmed detected fault reports PENDING --------
 function test_pending_REQ005(tc)
     D = tc.TestData.D;
     st = run_seq(D, [v1(D,40), 4.90], v2(D,40), 90);   % one clean, then one bad sample
     verifyEqual(tc, double(st.state), 1, 'REQ-DIAG-005 PENDING on first detected fault');
-    verifyEqual(tc, st.mil, 0, 'MIL off while only PENDING');
+    verifyEqual(tc, st.mil, false, 'MIL off while only PENDING');
 end
 
 % --- REQ-DIAG-008 : heal after a sustained clean run --------------------
@@ -58,7 +56,7 @@ function test_heal_REQ008(tc)
     v = [repmat(4.90, 1, D.confirm_cnt), repmat(v1(D,40), 1, D.heal_cnt + 5)]; % confirm, then clean
     st = run_seq(D, v, v2(D,40), 90);
     verifyEqual(tc, double(st.state), 0, 'REQ-DIAG-008 healed back to NO_FAULT');
-    verifyEqual(tc, st.mil, 0, 'MIL cleared after heal');
+    verifyEqual(tc, st.mil, false, 'MIL cleared after heal');
     verifyEqual(tc, double(st.dtc), 0, 'DTC cleared after heal');
 end
 

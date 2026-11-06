@@ -13,7 +13,8 @@ function gen_code()
     if ~exist([mdl '.slx'], 'file'); build_model(); end
     load_system(mdl);
 
-    outDir = fullfile('..', 'generated');
+    projectRoot = fileparts(fileparts(mfilename('fullpath')));
+    outDir = fullfile(projectRoot, 'generated');
     if ~exist(outDir, 'dir'); mkdir(outDir); end
 
     % ---- System target: embedded real-time (ert.tlc) -------------------
@@ -27,9 +28,7 @@ function gen_code()
     set_param(mdl, 'SupportNonFinite',      'off');
     set_param(mdl, 'SupportContinuousTime', 'off');
     set_param(mdl, 'GenerateComments',      'on');
-    set_param(mdl, 'RequirementsInCode',    'on');
     set_param(mdl, 'GenerateReport',        'on');
-    set_param(mdl, 'CodeStyleApplied',      'on');
 
     try
         set_param(mdl, 'PackageGeneratedCodeAndArtifacts', 'on');
@@ -42,9 +41,16 @@ function gen_code()
     fprintf('gen_code: generating C for %s ...\n', sub);
     rtwbuild(sub);
 
-    src = dir(fullfile(pwd, 'DiagMonitor_ert_rtw', '*.c'));
+    buildDir = fullfile(pwd, 'DiagMonitor_ert_rtw');
+
+    srcC = dir(fullfile(buildDir, '*.c'));
+    srcH = dir(fullfile(buildDir, '*.h'));
+    src = [srcC; srcH];
+
     for k = 1:numel(src)
         copyfile(fullfile(src(k).folder, src(k).name), outDir);
     end
-    fprintf('gen_code: C source copied to %s\n', outDir);
+
+    fprintf('gen_code: %d C/header files copied to %s\n', ...
+    numel(src), outDir);
 end

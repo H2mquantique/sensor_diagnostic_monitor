@@ -52,13 +52,32 @@ function out = simulateScenario(mdl, scn, D)
 end
 
 function v = getLog(so, name)
-    try
-        v = so.(name); if isa(v, 'timeseries'); v = v.Data; end
-    catch
-        v = so.yout.get(name).Values.Data;
-    end
-end
 
+    ds = so.yout;
+
+    for k = 1:ds.numElements
+
+        elem = ds.get(k);
+
+        blockName = getfullname(elem.BlockPath.getBlock(1));
+
+        [~, signalName] = fileparts(blockName);
+
+        if strcmp(signalName, name)
+
+            v = elem.Values;
+
+            if isa(v, 'timeseries')
+                v = v.Data;
+            end
+
+            return;
+        end
+    end
+
+    error('Signal "%s" not found in SimulationOutput.yout.', name);
+
+end
 % =======================================================================
 function [pass, req, detail] = evaluate(name, out, D)
     confirmed = any(out.state == D.STATE.CONFIRMED);
@@ -74,7 +93,11 @@ function [pass, req, detail] = evaluate(name, out, D)
             detail = 'implausible-step (rate) DTC bit set';
         case 'tc_confirm'
             idx  = find(out.state == D.STATE.CONFIRMED, 1, 'first');
-            ms   = isempty(idx) * NaN + ~isempty(idx) * (out.t(idx) - 1.0) * 1000;
+            if isempty(idx)
+                ms = NaN;
+            else
+                ms = (out.t(idx) - 1.0) * 1000;
+            end
             pass = confirmed && milOn && any(out.ff_valid > 0.5);
             req  = 'REQ-DIAG-004/005/006/007';
             detail = sprintf('confirmed @ ~%.0f ms after onset; freeze-frame valid', ms);
